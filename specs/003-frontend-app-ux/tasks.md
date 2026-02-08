@@ -58,11 +58,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T011 [P] [US1] Update landing page in frontend/src/app/page.tsx with hero section and Sign Up CTA (FR-001)
-- [ ] T012 [P] [US1] Create register page in frontend/src/app/auth/register/page.tsx with RegisterForm and login link
-- [ ] T013 [US1] Update RegisterForm in frontend/src/components/Auth/RegisterForm.tsx with email/password validation, inline errors (FR-002, FR-004)
-- [ ] T014 [US1] Implement auto-signin after registration in RegisterForm (User Story 1.2: auto-redirect to dashboard)
-- [ ] T015 [US1] Handle duplicate email error in RegisterForm showing "sign in instead" suggestion (User Story 1.4)
+- [X] T011 [P] [US1] Update landing page in frontend/src/app/page.tsx with hero section and Sign Up CTA (FR-001)
+- [X] T012 [P] [US1] Create register page in frontend/src/app/auth/register/page.tsx with RegisterForm and login link
+- [X] T013 [US1] Update RegisterForm in frontend/src/components/Auth/RegisterForm.tsx with email/password validation, inline errors (FR-002, FR-004)
+- [X] T014 [US1] Implement auto-signin after registration in RegisterForm (User Story 1.2: auto-redirect to dashboard)
+- [X] T015 [US1] Handle duplicate email error in RegisterForm showing "sign in instead" suggestion (User Story 1.4)
 
 **Checkpoint**: User Story 1 complete - new users can sign up and reach dashboard
 
@@ -76,10 +76,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [P] [US2] Create login page in frontend/src/app/auth/login/page.tsx with LoginForm and register link
-- [ ] T017 [US2] Update LoginForm in frontend/src/components/Auth/LoginForm.tsx with email/password validation, inline errors (FR-003, FR-004)
-- [ ] T018 [US2] Show generic "Invalid credentials" message on auth failure (User Story 2.2)
-- [ ] T019 [US2] Implement session persistence check on app load in frontend/src/app/layout.tsx (User Story 2.3: session persists across browser close)
+- [X] T016 [P] [US2] Create login page in frontend/src/app/auth/login/page.tsx with LoginForm and register link
+- [X] T017 [US2] Update LoginForm in frontend/src/components/Auth/LoginForm.tsx with email/password validation, inline errors (FR-003, FR-004)
+- [X] T018 [US2] Show generic "Invalid credentials" message on auth failure (User Story 2.2)
+- [X] T019 [US2] Implement session persistence check on app load in frontend/src/app/layout.tsx (User Story 2.3: session persists across browser close)
 
 **Checkpoint**: User Story 2 complete - returning users can sign in
 
@@ -93,11 +93,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T020 [P] [US3] Create EmptyState component in frontend/src/components/UI/EmptyState.tsx with title, description, action button (FR-012)
-- [ ] T021 [US3] Update dashboard page in frontend/src/app/dashboard/page.tsx to fetch todos on mount with loading state (FR-009, FR-011)
-- [ ] T022 [US3] Integrate EmptyState in dashboard when user has no tasks with "Create your first task" guidance (User Story 3.3)
-- [ ] T023 [US3] Update TodoList in frontend/src/components/Todo/TodoList.tsx to visually separate completed from active tasks (FR-010)
-- [ ] T024 [US3] Add responsive layout to TodoList for mobile single-column view (FR-023)
+- [X] T020 [P] [US3] Create EmptyState component in frontend/src/components/UI/EmptyState.tsx with title, description, action button (FR-012)
+- [X] T021 [US3] Update dashboard page in frontend/src/app/dashboard/page.tsx to fetch todos on mount with loading state (FR-009, FR-011)
+- [X] T022 [US3] Integrate EmptyState in dashboard when user has no tasks with "Create your first task" guidance (User Story 3.3)
+- [X] T023 [US3] Update TodoList in frontend/src/components/Todo/TodoList.tsx to visually separate completed from active tasks (FR-010)
+- [X] T024 [US3] Add responsive layout to TodoList for mobile single-column view (FR-023)
 
 **Checkpoint**: User Story 3 complete - dashboard shows tasks with visual organization
 
@@ -111,11 +111,11 @@
 
 ### Implementation for User Story 4
 
-- [ ] T025 [P] [US4] Update TodoForm in frontend/src/components/Todo/TodoForm.tsx with title (required), description (optional) fields (FR-013)
-- [ ] T026 [US4] Add title validation to TodoForm showing error when empty (User Story 4.3)
-- [ ] T027 [US4] Add loading state to TodoForm submit button during save (User Story 4.4, FR-017)
-- [ ] T028 [US4] Add "Add Task" button to dashboard that shows TodoForm (User Story 4.1)
-- [ ] T029 [US4] Integrate createTodo from useTodos hook in dashboard, show new task immediately (User Story 4.2)
+- [X] T025 [P] [US4] Update TodoForm in frontend/src/components/Todo/TodoForm.tsx with title (required), description (optional) fields (FR-013)
+- [X] T026 [US4] Add title validation to TodoForm showing error when empty (User Story 4.3)
+- [X] T027 [US4] Add loading state to TodoForm submit button during save (User Story 4.4, FR-017)
+- [X] T028 [US4] Add "Add Task" button to dashboard that shows TodoForm (User Story 4.1)
+- [X] T029 [US4] Integrate createTodo from useTodos hook in dashboard, show new task immediately (User Story 4.2)
 
 **Checkpoint**: User Story 4 complete - users can create tasks
 
@@ -129,10 +129,10 @@
 
 ### Implementation for User Story 6
 
-- [ ] T030 [P] [US6] Update TodoItem in frontend/src/components/Todo/TodoItem.tsx with checkbox for completion toggle (FR-015)
-- [ ] T031 [US6] Add visual styling to TodoItem for completed state (strikethrough, muted colors) (FR-010)
-- [ ] T032 [US6] Implement optimistic update in useTodos toggleComplete with rollback on error (FR-020, SC-004)
-- [ ] T033 [US6] Integrate toggle callback from dashboard to TodoItem through TodoList
+- [X] T030 [P] [US6] Update TodoItem in frontend/src/components/Todo/TodoItem.tsx with checkbox for completion toggle (FR-015)
+- [X] T031 [US6] Add visual styling to TodoItem for completed state (strikethrough, muted colors) (FR-010)
+- [X] T032 [US6] Implement optimistic update in useTodos toggleComplete with rollback on error (FR-020, SC-004)
+- [X] T033 [US6] Integrate toggle callback from dashboard to TodoItem through TodoList
 
 **Checkpoint**: User Story 6 complete - task toggle works with immediate feedback
 
@@ -146,10 +146,10 @@
 
 ### Implementation for User Story 5
 
-- [ ] T034 [P] [US5] Add edit mode support to TodoForm with pre-filled values (User Story 5.1)
-- [ ] T035 [US5] Add Edit button to TodoItem that opens TodoForm in edit mode (FR-014)
-- [ ] T036 [US5] Implement cancel in TodoForm preserving original values (User Story 5.3)
-- [ ] T037 [US5] Integrate updateTodo from useTodos hook, show updated task immediately (User Story 5.2)
+- [X] T034 [P] [US5] Add edit mode support to TodoForm with pre-filled values (User Story 5.1)
+- [X] T035 [US5] Add Edit button to TodoItem that opens TodoForm in edit mode (FR-014)
+- [X] T036 [US5] Implement cancel in TodoForm preserving original values (User Story 5.3)
+- [X] T037 [US5] Integrate updateTodo from useTodos hook, show updated task immediately (User Story 5.2)
 
 **Checkpoint**: User Story 5 complete - users can edit tasks
 
@@ -163,10 +163,10 @@
 
 ### Implementation for User Story 7
 
-- [ ] T038 [P] [US7] Create ConfirmDialog component in frontend/src/components/UI/ConfirmDialog.tsx with danger variant (FR-016)
-- [ ] T039 [US7] Add Delete button to TodoItem that triggers ConfirmDialog (User Story 7.1)
-- [ ] T040 [US7] Implement confirm action in ConfirmDialog calling deleteTodo (User Story 7.2)
-- [ ] T041 [US7] Implement cancel action in ConfirmDialog preserving task (User Story 7.3)
+- [X] T038 [P] [US7] Create ConfirmDialog component in frontend/src/components/UI/ConfirmDialog.tsx with danger variant (FR-016)
+- [X] T039 [US7] Add Delete button to TodoItem that triggers ConfirmDialog (User Story 7.1)
+- [X] T040 [US7] Implement confirm action in ConfirmDialog calling deleteTodo (User Story 7.2)
+- [X] T041 [US7] Implement cancel action in ConfirmDialog preserving task (User Story 7.3)
 
 **Checkpoint**: User Story 7 complete - users can delete tasks with confirmation
 
@@ -180,10 +180,10 @@
 
 ### Implementation for User Story 8
 
-- [ ] T042 [P] [US8] Add user email display to dashboard header/navigation (FR-024)
-- [ ] T043 [US8] Add Sign Out button to navigation accessible from all authenticated pages (FR-025)
-- [ ] T044 [US8] Implement sign out clearing localStorage and redirecting to landing (User Story 8.1)
-- [ ] T045 [US8] Verify unauthenticated access to dashboard redirects to sign in (User Story 8.2)
+- [X] T042 [P] [US8] Add user email display to dashboard header/navigation (FR-024)
+- [X] T043 [US8] Add Sign Out button to navigation accessible from all authenticated pages (FR-025)
+- [X] T044 [US8] Implement sign out clearing localStorage and redirecting to landing (User Story 8.1)
+- [X] T045 [US8] Verify unauthenticated access to dashboard redirects to sign in (User Story 8.2)
 
 **Checkpoint**: User Story 8 complete - users can sign out securely
 
@@ -193,13 +193,13 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T046 [P] Create Toast component in frontend/src/components/UI/Toast.tsx for success/error notifications (FR-018, FR-019)
-- [ ] T047 [P] Add Toast integration for task operations (create, update, delete success/error)
-- [ ] T048 Apply responsive styles to all pages for tablet breakpoint 768px-1023px (FR-022)
-- [ ] T049 Apply responsive styles to all pages for desktop breakpoint 1024px+ (FR-021)
-- [ ] T050 Add error boundary and network error handling with retry option (Edge Cases)
-- [ ] T051 Validate all authenticated API calls include Authorization header (SC-007)
-- [ ] T052 Run quickstart.md validation to verify setup instructions work
+- [X] T046 [P] Create Toast component in frontend/src/components/UI/Toast.tsx for success/error notifications (FR-018, FR-019)
+- [X] T047 [P] Add Toast integration for task operations (create, update, delete success/error)
+- [X] T048 Apply responsive styles to all pages for tablet breakpoint 768px-1023px (FR-022)
+- [X] T049 Apply responsive styles to all pages for desktop breakpoint 1024px+ (FR-021)
+- [X] T050 Add error boundary and network error handling with retry option (Edge Cases)
+- [X] T051 Validate all authenticated API calls include Authorization header (SC-007)
+- [X] T052 Run quickstart.md validation to verify setup instructions work
 
 ---
 
