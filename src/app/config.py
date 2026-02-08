@@ -94,10 +94,6 @@ class Settings(BaseSettings):
     )
 
     # Better Auth Configuration (optional, for frontend integration)
-    BETTER_AUTH_SECRET: str = Field(
-        default="your-super-secret-key-here",
-        description="Better Auth secret key"
-    )
     BETTER_AUTH_URL: str = Field(
         default="http://localhost:3000",
         description="Better Auth URL"
@@ -112,14 +108,14 @@ class Settings(BaseSettings):
             raise ValueError(f"APP_ENV must be one of: {', '.join(allowed)}")
         return v.lower()
 
-    @field_validator("JWT_SECRET")
+    @field_validator("BETTER_AUTH_SECRET")
     @classmethod
     def validate_jwt_secret(cls, v: str) -> str:
         """Warn if using default JWT secret in non-development mode."""
-        if v == "your-default-secret-key-change-in-production":
+        if v in ("your-default-secret-key-change-in-production", "your-super-secret-key-here"):
             import warnings
             warnings.warn(
-                "Using default JWT_SECRET. This is insecure for production use.",
+                "Using default BETTER_AUTH_SECRET. This is insecure for production use.",
                 UserWarning
             )
         return v

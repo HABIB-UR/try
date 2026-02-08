@@ -12,7 +12,7 @@ from typing import Optional
 import logging
 
 from jose import JWTError, jwt, ExpiredSignatureError
-from passlib.context import CryptContext
+import bcrypt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlmodel import Session, select
@@ -29,21 +29,33 @@ SECRET_KEY = settings.BETTER_AUTH_SECRET
 ALGORITHM = settings.JWT_ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.JWT_EXPIRATION_MINUTES
 
-# Password hashing with bcrypt
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 # HTTP Bearer token security scheme
 security = HTTPBearer(auto_error=False)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verify a password against its hash using bcrypt."""
+    try:
+        # Convert password and hash to bytes
+        password_bytes = plain_password.encode('utf-8')
+        hash_bytes = hashed_password.encode('utf-8')
+        return bcrypt.checkpw(password_bytes, hash_bytes)
+    except Exception as e:
+        logger.error(f"Password verification failed: {str(e)}")
+        return False
 
 
 def get_password_hash(password: str) -> str:
     """Hash a password using bcrypt."""
-    return pwd_context.hash(password)
+    try:
+        # Convert password to bytes and generate salt
+        password_bytes = password.encode('utf-8')
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(password_bytes, salt)
+        return hashed.decode('utf-8')
+    except Exception as e:
+        logger.error(f"Password hashing failed: {str(e)}")
+        raise
 
 
 def authenticate_user(session: Session, email: str, password: str) -> Optional[User]:
@@ -59,7 +71,8 @@ def authenticate_user(session: Session, email: str, password: str) -> Optional[U
     # Always verify password even if user not found (prevents timing attacks)
     if not user:
         # Dummy verification to maintain constant time
-        pwd_context.dummy_verify()
+        # Use a fake hash to keep timing consistent
+        bcrypt.checkpw(b"dummy", bcrypt.hashpw(b"dummy", bcrypt.gensalt()))
         return None
 
     if not verify_password(password, user.hashed_password):
