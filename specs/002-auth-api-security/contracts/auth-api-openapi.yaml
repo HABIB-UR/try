@@ -1,0 +1,314 @@
+openapi: 3.0.3
+info:
+  title: Authentication & API Security
+  description: |
+    API contracts for Better Auth + JWT authentication system.
+    All protected endpoints require Authorization: Bearer <token> header.
+  version: 1.0.0
+  contact:
+    name: Phase II Todo App
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token issued by Better Auth
+
+  schemas:
+    UserRegister:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          minLength: 8
+          example: securepassword123
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          example: securepassword123
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWT token for API authentication
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        token_type:
+          type: string
+          enum: [bearer]
+          example: bearer
+
+    RegisterResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: User registered successfully
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            email:
+              type: string
+              format: email
+
+    Error401:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: Could not validate credentials
+
+    Error409:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: Email already registered
+
+    Error422:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            type: object
+            properties:
+              loc:
+                type: array
+                items:
+                  type: string
+              msg:
+                type: string
+              type:
+                type: string
+
+paths:
+  /api/auth/register:
+    post:
+      summary: Register new user
+      description: |
+        Create a new user account with email and password.
+        Returns JWT token on success for immediate authentication.
+      operationId: registerUser
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '409':
+          description: Email already registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error409'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error422'
+
+  /api/auth/login:
+    post:
+      summary: Authenticate user
+      description: |
+        Authenticate with email and password.
+        Returns JWT token valid for 24 hours.
+      operationId: loginUser
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+
+  /api/todos:
+    get:
+      summary: Get user's todos
+      description: Returns all todos belonging to the authenticated user
+      operationId: getTodos
+      tags:
+        - Todos
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of user's todos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+
+    post:
+      summary: Create new todo
+      description: Create a new todo for the authenticated user
+      operationId: createTodo
+      tags:
+        - Todos
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Todo created
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+
+  /api/todos/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    put:
+      summary: Update todo
+      description: |
+        Update an existing todo. Returns 404 if todo doesn't exist
+        or belongs to another user (prevents enumeration).
+      operationId: updateTodo
+      tags:
+        - Todos
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                completed:
+                  type: boolean
+      responses:
+        '200':
+          description: Todo updated
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Todo not found or not owned by user
+
+    delete:
+      summary: Delete todo
+      description: |
+        Delete an existing todo. Returns 404 if todo doesn't exist
+        or belongs to another user (prevents enumeration).
+      operationId: deleteTodo
+      tags:
+        - Todos
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Todo deleted
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Todo not found or not owned by user
+
+  /api/todos/{id}/complete:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    patch:
+      summary: Toggle todo completion
+      description: Toggle the completion status of a todo
+      operationId: toggleTodoComplete
+      tags:
+        - Todos
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Completion status toggled
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Todo not found or not owned by user

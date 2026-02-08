@@ -1,55 +1,58 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- SYNC IMPACT REPORT
+Version change: N/A (initial version) → 1.0.0
+Modified principles: None (new document)
+Added sections: All sections as initial constitution
+Removed sections: None
+Templates requiring updates:
+  - .specify/templates/plan-template.md ✅ updated
+  - .specify/templates/spec-template.md ✅ updated
+  - .specify/templates/tasks-template.md ✅ updated
+  - .specify/templates/commands/*.md ⚠ pending
+Follow-up TODOs: None
+-->
+# Phase II – Todo Full-Stack Web Application Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Spec-driven development
+All implementation must follow the spec → plan → tasks → implementation workflow. No feature implementation outside defined specs. Each implementation step must be derived from a plan, which must be derived strictly from specs.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Security-first architecture
+Authentication and authorization must be implemented before core functionality. All API endpoints require valid JWT after authentication. Requests without token must return 401 Unauthorized. Token signature must be verified using shared secret. User must never access or modify another user's data.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### User data isolation and correctness
+Every API endpoint must enforce authenticated user ownership. All task operations must be scoped to authenticated user ID. Database persistence required (no in-memory storage). Multi-user support required with proper data separation.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Deterministic, reproducible agent output
+Claude Code must generate all code (no manual edits). Errors must be handled deterministically (401, 403, 404, 500). All functionality must trace directly to written specs. No shared session storage between frontend and backend.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Zero manual coding
+All implementation via Claude Code agents only. No manual coding allowed. Every implementation step must be derived from a plan. Iterative refinement allowed only through spec updates.
 
-### [PRINCIPLE_6_NAME]
+## Technology Constraints
 
+- Frontend: Next.js 16+ (App Router only)
+- Backend: Python FastAPI
+- ORM: SQLModel
+- Database: Neon Serverless PostgreSQL
+- Authentication: Better Auth with JWT
+- Secrets managed via environment variables only
+- All task operations scoped to authenticated user ID
+- RESTful API design with clear resource boundaries
+- Stateless backend authentication using JWT tokens
 
-[PRINCIPLE__DESCRIPTION]
+## Architecture Rules
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- REST API must implement all 5 basic-level features
+- Must function as a real web application end-to-end
+- Responsive frontend required
+- JWT-based authentication must be verified server-side
+- Frontend, backend, and auth boundaries must be explicit
+- Token expiration must be enforced
+- All API endpoints must implement authenticated user ownership enforcement
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+All specs fully implemented without deviation. Authentication correctly enforced at all layers. Success criteria include end-to-end functionality with proper authentication, multi-user support, and responsive frontend. Every API endpoint enforces authenticated user ownership. Technology constraints must be followed strictly.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-02-06 | **Last Amended**: 2026-02-06

@@ -1,4 +1,4 @@
-# Claude Code Rules
+﻿# Claude Code Rules
 
 This file is generated during init for the selected agent.
 
@@ -13,6 +13,45 @@ You are an expert AI assistant specializing in Spec-Driven Development (SDD). Yo
 - Prompt History Records (PHRs) are created automatically and accurately for every user prompt.
 - Architectural Decision Record (ADR) suggestions are made intelligently for significant decisions.
 - All changes are small, testable, and reference code precisely.
+
+## Project Requirements
+
+Basic Level Functionality
+Objective: Using Claude Code and Spec-Kit Plus transform the console app into a modern multi-user web application with persistent storage.
+💡Development Approach: Use the Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via Claude Code. No manual coding allowed. We will review the process, prompts, and iterations to judge each phase and project.
+
+Requirements
+- Implement all 5 Basic Level features as a web application
+- Create RESTful API endpoints
+- Build responsive frontend interface
+- Store data in Neon Serverless PostgreSQL database
+- Authentication – Implement user signup/signin using Better Auth
+
+### Technology Stack
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 16+ (App Router) |
+| Backend | Python FastAPI |
+| ORM | SQLModel |
+| Database | Neon Serverless PostgreSQL |
+| Spec-Driven | Claude Code + Spec-Kit Plus |
+| Authentication | Better Auth |
+
+### Specialized Agents to Use
+- **Auth Agent:** Use `auth-auditor` agent for authentication implementation
+- **Frontend Agent:** Use `nextjs-frontend-dev` agent for frontend development (e.g., Next.js)
+- **DB Agent:** Use `neon-postgres-optimizer` agent for database design and operations
+- **Backend Agent:** Use `fastapi-backend-validator` agent for FastAPI development
+
+### Authentication Flow
+Better Auth can be configured to issue JWT (JSON Web Token) tokens when users log in. These tokens are self-contained credentials that include user information and can be verified by any service that knows the secret key.
+
+How It Works:
+1. User logs in on Frontend → Better Auth creates a session and issues a JWT token
+2. Frontend makes API call → Includes the JWT token in the Authorization: Bearer <token> header
+3. Backend receives request → Extracts token from header, verifies signature using shared secret
+4. Backend identifies user → Decodes token to get user ID, email, etc. and matches it with the user ID in the URL
+5. Backend filters data → Returns only tasks belonging to that user
 
 ## Core Guarantees (Product Promise)
 
@@ -30,6 +69,22 @@ Agents MUST prioritize and use MCP tools and CLI commands for all information ga
 
 ### 2. Execution Flow:
 Treat MCP servers as first-class tools for discovery, verification, execution, and state capture. PREFER CLI interactions (running commands and capturing outputs) over manual file creation or reliance on internal knowledge.
+
+### 3. Agent Selection Guidelines:
+When working on specific parts of the project, use the appropriate specialized agents:
+
+- **For authentication features:** Use the `auth-auditor` agent via the Task tool
+- **For frontend development:** Use the `nextjs-frontend-dev` agent via the Task tool
+- **For database operations:** Use the `neon-postgres-optimizer` agent via the Task tool
+- **For backend API development:** Use the `fastapi-backend-validator` agent via the Task tool
+
+Example usage:
+```
+Task(subagent_type="auth-auditor", description="implement auth", prompt="Implement user signup and signin with Better Auth...")
+Task(subagent_type="nextjs-frontend-dev", description="build ui", prompt="Create responsive UI components for the Next.js app...")
+Task(subagent_type="neon-postgres-optimizer", description="design db", prompt="Design PostgreSQL schema with SQLModel...")
+Task(subagent_type="fastapi-backend-validator", description="create api", prompt="Build FastAPI endpoints with proper validation...")
+```
 
 ### 3. Knowledge capture (PHR) for Every User Input.
 After completing requests, you **MUST** create a PHR (Prompt History Record).
@@ -126,10 +181,12 @@ You are not expected to solve every problem autonomously. You MUST invoke the us
 ### Execution contract for every request
 1) Confirm surface and success criteria (one sentence).
 2) List constraints, invariants, non‑goals.
-3) Produce the artifact with acceptance checks inlined (checkboxes or tests where applicable).
-4) Add follow‑ups and risks (max 3 bullets).
-5) Create PHR in appropriate subdirectory under `history/prompts/` (constitution, feature-name, or general).
-6) If plan/tasks identified decisions that meet significance, surface ADR suggestion text as described above.
+3) Follow the Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via Claude Code agents
+4) Produce the artifact with acceptance checks inlined (checkboxes or tests where applicable).
+5) Use appropriate specialized agents for different technology layers (auth, frontend, database, backend)
+6) Add follow‑ups and risks (max 3 bullets).
+7) Create PHR in appropriate subdirectory under `history/prompts/` (constitution, feature-name, or general).
+8) If plan/tasks identified decisions that meet significance, surface ADR suggestion text as described above.
 
 ### Minimum acceptance criteria
 - Clear, testable acceptance criteria included
@@ -139,7 +196,7 @@ You are not expected to solve every problem autonomously. You MUST invoke the us
 
 ## Architect Guidelines (for planning)
 
-Instructions: As an expert architect, generate a detailed architectural plan for [Project Name]. Address each of the following thoroughly.
+Instructions: As an expert architect, generate a detailed architectural plan for [Project Name] using the specified technology stack (Next.js, FastAPI, SQLModel, Neon Serverless PostgreSQL, Better Auth). Address each of the following thoroughly.
 
 1. Scope and Dependencies:
    - In Scope: boundaries and key features.
@@ -151,7 +208,7 @@ Instructions: As an expert architect, generate a detailed architectural plan for
    - Principles: measurable, reversible where possible, smallest viable change.
 
 3. Interfaces and API Contracts:
-   - Public APIs: Inputs, Outputs, Errors.
+   - Public APIs: Inputs, Outputs, Errors (FastAPI REST endpoints).
    - Versioning Strategy.
    - Idempotency, Timeouts, Retries.
    - Error Taxonomy with status codes.
@@ -159,27 +216,33 @@ Instructions: As an expert architect, generate a detailed architectural plan for
 4. Non-Functional Requirements (NFRs) and Budgets:
    - Performance: p95 latency, throughput, resource caps.
    - Reliability: SLOs, error budgets, degradation strategy.
-   - Security: AuthN/AuthZ, data handling, secrets, auditing.
-   - Cost: unit economics.
+   - Security: AuthN/AuthZ with Better Auth JWT tokens, data handling, secrets, auditing.
+   - Cost: Neon Serverless PostgreSQL usage, unit economics.
 
 5. Data Management and Migration:
-   - Source of Truth, Schema Evolution, Migration and Rollback, Data Retention.
+   - Source of Truth: Neon Serverless PostgreSQL with SQLModel ORM.
+   - Schema Evolution, Migration and Rollback, Data Retention.
 
-6. Operational Readiness:
+6. Authentication and Authorization:
+   - Better Auth integration for user management.
+   - JWT token-based authentication flow.
+   - User-specific data filtering and access control.
+
+7. Operational Readiness:
    - Observability: logs, metrics, traces.
    - Alerting: thresholds and on-call owners.
    - Runbooks for common tasks.
    - Deployment and Rollback strategies.
    - Feature Flags and compatibility.
 
-7. Risk Analysis and Mitigation:
+8. Risk Analysis and Mitigation:
    - Top 3 Risks, blast radius, kill switches/guardrails.
 
-8. Evaluation and Validation:
+9. Evaluation and Validation:
    - Definition of Done (tests, scans).
    - Output Validation for format/requirements/safety.
 
-9. Architectural Decision Record (ADR):
+10. Architectural Decision Record (ADR):
    - For each significant decision, create an ADR and link it.
 
 ### Architecture Decision Records (ADR) - Intelligent Suggestion
